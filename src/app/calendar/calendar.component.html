@@ -1,0 +1,36 @@
+<input type="date" [ngModel]="date" />
+<input type="number" [(ngModel)]="amount" />
+<button (click)="addTransaction()">Click to Add Transaction</button>
+<button (click)="addRecurringTransaction()">
+  Click to Add Recurring Weekly Transaction
+</button>
+<div class="upcoming"></div>
+<div class="recurring"></div>
+
+<div class="month">
+
+  <div class="day">
+    <button (click)="changeDate('past')">-</button> {{ month }}/{{ day }}/{{year}}
+    <button (click)="changeDate('future')">+</button>
+  </div>
+</div>
+
+<div class="calendar">
+  <div
+    *ngFor="let d of getDaysInMonth(); let i = index"
+    (click)="getProjected(i)"
+    class="day-block"
+    [ngStyle]="{color: projDay === i ? 'white': 'black' }"
+  >
+    {{ i + 1 }}
+    <div
+      *ngFor="let t of getDaysTransactions(year, month, i )"
+      class="transaction-small"
+    >
+      {{ t }}
+    </div>
+    <div class="balance" *ngIf="i === projDay">
+      {{ projectedBalance }}
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 .calendar {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(7,25px);
+  grid-template-rows: repeat(auto, 50px);
   height: 250px;
   width: 200px;
   gap: 2px;
@@ -16,4 +17,8 @@
 .balance{
   font-size: 12px;
   font-weight: bold;
+}
+
+[title='4']{
+
 }

@@ -1,6 +1,6 @@
 <input type="date" [ngModel]="date" />
 <input type="number" [(ngModel)]="amount" />
-<button (click)="addTransaction()">Click to Add Transaction</button>
+<button (click)="addTransactionWithDate()">Click to Add Transaction</button>
 <button (click)="addRecurringTransaction()">
   Click to Add Recurring Weekly Transaction
 </button>
@@ -17,19 +17,19 @@
 
 <div class="calendar">
   <div
-    *ngFor="let d of getDaysInMonth(); let i = index"
+    *ngFor="let d of getDaysInMonth(); let i = index;"
     (click)="getProjected(i)"
     class="day-block"
-    [ngStyle]="{color: projDay === i ? 'white': 'black' }"
+    [ngStyle]="{color: projDay === i + 1 ? 'white': (i + 1) === today.getDate() ? 'lightgray': 'black' }"
   >
     {{ i + 1 }}
     <div
-      *ngFor="let t of getDaysTransactions(year, month, i )"
+      *ngFor="let t of getDaysTransactions(year, month, i + 1 )"
       class="transaction-small"
     >
       {{ t }}
     </div>
-    <div class="balance" *ngIf="i === projDay">
+    <div class="balance" *ngIf="i + 1 === projDay">
       {{ projectedBalance }}
     </div>
   </div>

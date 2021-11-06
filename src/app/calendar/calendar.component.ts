@@ -1,38 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  selector: "app-calendar",
+  templateUrl: "./calendar.component.html",
+  styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
-  dayInMilliseconds = 8.64e+7;
+  dayInMilliseconds = 8.64e7;
   projDay: number | null = null;
   startingBalance = 400;
   projectedBalance = 0;
   amount: number = 0;
   // transactions = {};
   transactions: any = {
-    '2021-11-03': [30],
-    '2021-11-23': [3],
-    '2021-11-29': [-35],
-    '2022-02-23': [30],
-    '2021-11-05': [50],
-    '2021-12-23': [30],
+    "2021-11-03": [30],
+    "2021-11-23": [3],
+    "2021-11-29": [-35],
+    "2022-02-23": [30],
+    "2021-11-05": [50],
+    "2021-12-23": [30],
   };
 
-  today = new Date();
+  today = this.getLocalDate(new Date());
+  currentDate = this.today;
 
-  addTransaction() {
-    const dateExists = this.transactions[this.date];
-    if (dateExists) {
-      this.transactions[this.date].push(this.amount);
-    } else {
-      this.transactions[this.date] = [this.amount];
-    }
-  }
-  // DUPLICATE, refactor later
-  addTransactionWithDate(date: string) {
+  addTransactionWithDate(date: string = this.getFormattedDate()) {
     const dateExists = this.transactions[date];
     if (dateExists) {
       this.transactions[date].push(this.amount);
@@ -41,23 +33,32 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  addRecurringTransaction() {
-    const freqInMS = {
-      weekly: 6.048e+8,
+  addRecurringTransaction(freq: string = "weekly") {
+    const freqInMS: { [key: string]: number } = {
+      weekly: 6.048e8,
       biWeekly: this.dayInMilliseconds * 14,
     };
 
-    let todayInMS = this.today.getTime();
-    let inc = this.dayInMilliseconds * 7;
-    let twoYearsInMS = todayInMS + (this.dayInMilliseconds * 730);
+    let todayInMS = this.getLocalDate(this.currentDate).getTime();
 
-    console.log(new Date(todayInMS));
-    console.log(new Date(twoYearsInMS));
+    let inc = freqInMS.weekly;
+    let twoYearsInMS = todayInMS + this.dayInMilliseconds * 730;
+    let isDst = new Date(todayInMS).toString().includes("Daylight");
+    const checkDst = (date: number) =>
+      new Date(date).toString().includes("Daylight");
 
-    for (let todayTime = todayInMS; todayTime < twoYearsInMS; todayTime += inc) {
+    // Need to account for DST
+    for (todayInMS; todayInMS < twoYearsInMS; todayInMS += freqInMS[freq]) {
+      if (checkDst(todayInMS) !== isDst) {
+        if (isDst === true) {
+          todayInMS += this.dayInMilliseconds;
+        } else {
+          todayInMS -= this.dayInMilliseconds;
+        }
+        isDst = !isDst;
+      }
 
-      const transactionDate = this.getFormattedDate(new Date(todayTime));
-      console.log(transactionDate)
+      const transactionDate = this.getFormattedDate(new Date(todayInMS));
       this.addTransactionWithDate(transactionDate);
     }
     // Add event Id for recuuring transations to bulk delete
@@ -65,12 +66,12 @@ export class CalendarComponent implements OnInit {
   }
   getProjected(day: number) {
     const transactions = [];
-    this.projDay = day;
-    this.today = new Date(this.year, this.month - 1, day + 1);
+    this.projDay = day + 1;
+    this.currentDate = new Date(this.year, this.month - 1, day + 1);
 
     for (let key in this.transactions) {
       const keyDate = new Date(key).getTime();
-      const projectedDate = this.today.getTime();
+      const projectedDate = this.currentDate.getTime();
       if (keyDate <= projectedDate) {
         transactions.push(...this.transactions[key]);
       }
@@ -78,38 +79,40 @@ export class CalendarComponent implements OnInit {
     this.projectedBalance =
       this.startingBalance + transactions.reduce((a, b) => a + b);
   }
+
   getDaysTransactions(year: number, month: number, day: number) {
     const date = this.getFormattedDate(new Date(year, month - 1, day));
     return this.transactions[date];
   }
-
+  getLocalDate(date: Date | string) {
+    if (typeof date === "string") {
+      date = new Date(date);
+    }
+    return new Date(date.toLocaleDateString());
+  }
   get month() {
-    return this.today.getMonth() + 1;
+    return this.currentDate.getMonth() + 1;
   }
   get day() {
-    return this.today.getDate();
+    return this.currentDate.getDate();
   }
   get year() {
-    return this.today.getFullYear();
+    return this.currentDate.getFullYear();
   }
+
   get date() {
     return this.getFormattedDate();
   }
-  getFormattedDate(date: Date = this.today) {
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let year = date.getFullYear();
 
-    return (
-      year +
-      '-' +
-      (month > 9 ? month : '0' + month) +
-      '-' +
-      (day > 9 ? day : '0' + day)
-    );
+  getFormattedDate(date: Date = this.currentDate) {
+    const formatted = this.getLocalDate(date)
+      .toISOString()
+      .split("T")[0];
+    return formatted;
   }
+
   resetToday() {
-    this.today = new Date();
+    this.currentDate = this.today;
   }
 
   getDaysInMonth() {
@@ -118,20 +121,14 @@ export class CalendarComponent implements OnInit {
     }).fill(null);
   }
   changeDate(val: string) {
-    // Changes Date by 1
-    if (val === 'future') {
-      // this.today = new Date(this.today.getTime() + this.dayInMilliseconds);
-      this.today = new Date(this.year, this.month ,this.day);
-
+    // Changes Month by 1
+    if (val === "future") {
+      this.currentDate = new Date(this.year, this.month, this.day);
     }
-    if (val == 'past') {
-      // this.today = new Date(this.today.getTime() - this.dayInMilliseconds);
-      this.today = new Date(this.year, this.month -2 ,this.day);
-
+    if (val == "past") {
+      this.currentDate = new Date(this.year, this.month - 2, this.day);
     }
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

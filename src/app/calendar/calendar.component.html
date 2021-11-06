@@ -1,11 +1,18 @@
-<input type="date" [ngModel]="date" />
-<input type="number" [(ngModel)]="amount" />
-<button (click)="addTransactionWithDate()">Click to Add Transaction</button>
-<button (click)="addRecurringTransaction()">
-  Click to Add Recurring Weekly Transaction
-</button>
-<div class="upcoming"></div>
-<div class="recurring"></div>
+<div class="enter-transaction">
+
+  <!-- <input type="date" [ngModel]="date" /> -->
+  <div class="transaction-info">
+    <button (click)="switchTransactionType()">{{ newTransactionType === 'positive' ? '+' : '-' }}</button>
+    <input type="number" [(ngModel)]="amount" />
+    <input type="text" class="new-transaction-label" placeholder="rent, groceries, gas"/>
+  </div>
+  <button (click)="addTransactionWithDate()">Click to Add Transaction</button>
+  <button (click)="addRecurringTransaction()">
+    Click to Add Recurring Weekly Transaction
+  </button>
+</div>
+<!-- <div class="upcoming"></div> -->
+<!-- <div class="recurring"></div> -->
 
 <div class="month">
 
@@ -21,7 +28,7 @@
     (click)="getProjected(d)"
     class="day-block"
     [ngStyle]="{color: projDay === d ? 'white': d === today.getDate() ? 'lightgray': 'black' }"
-    [title]="d === 1 && monthStartDay"
+    [title]="d === 1 ? monthStartDay : 'null'"
     >
     {{ d }}
     <div

@@ -6,12 +6,6 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
-  dayInMilliseconds = 8.64e7;
-  projDay: number | null = null;
-  startingBalance = 400;
-  projectedBalance = 0;
-  amount: number = 0;
-  
   transactions: any = {
     "2021-11-03": [30],
     "2021-11-23": [3],
@@ -21,23 +15,35 @@ export class CalendarComponent implements OnInit {
     "2021-12-23": [30],
   };
 
+  projDay: number = 0;
+  startingBalance = 400;
+  projectedBalance = 0;
+  amount: number = 0;
+  
+  dayInMilliseconds = 8.64e7;
+
   today = this.getLocalDate(new Date());
   currentDate = this.today;
   currentMonth = this.getDaysInMonth();
   monthStartDay!: number;
-
+  newTransactionType = 'negative'
   ngOnInit(): void {
     console.log(this.today);
     this.setMonthStartDay();
   }
 
-
+  switchTransactionType(){
+    this.newTransactionType = this.newTransactionType === 'negative' ? 'positive' : 'negative';
+  }
   addTransactionWithDate(date: string = this.getFormattedDate()) {
     const dateExists = this.transactions[date];
+    console.log(-this.amount);
+    
+    const transactionAmount = this.newTransactionType === 'positive' ? +this.amount : -this.amount
     if (dateExists) {
-      this.transactions[date].push(this.amount);
+      this.transactions[date].push(transactionAmount);
     } else {
-      this.transactions[date] = [this.amount];
+      this.transactions[date] = [transactionAmount];
     }
   }
 
@@ -46,10 +52,7 @@ export class CalendarComponent implements OnInit {
       weekly: 6.048e8,
       biWeekly: this.dayInMilliseconds * 14,
     };
-
-    let todayInMS = this.getLocalDate(this.currentDate).getTime();
-
-    let inc = freqInMS.weekly;
+    let todayInMS = this.currentDate.getTime();
     let twoYearsInMS = todayInMS + this.dayInMilliseconds * 730;
     let isDst = new Date(todayInMS).toString().includes("Daylight");
     const checkDst = (date: number) =>
@@ -127,7 +130,9 @@ export class CalendarComponent implements OnInit {
     return Array.from({
       length: new Date(this.year, this.month, 0).getDate(),
     }, (i,_ ) => {
-      return _ + 1;
+     const transactions = this.getDaysTransactions(this.year, this.month, _ +1);
+     // return {date: _ + 1, transactions};
+     return _ + 1;
     })
   }
 

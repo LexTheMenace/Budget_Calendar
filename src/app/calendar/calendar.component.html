@@ -10,26 +10,27 @@
 <div class="month">
 
   <div class="day">
-    <button (click)="changeDate('past')">-</button> {{ month }}/{{ day }}/{{year}}
+    <button (click)="changeDate('past')">-</button> {{ month }}/{{year}}
     <button (click)="changeDate('future')">+</button>
   </div>
 </div>
 
 <div class="calendar">
   <div
-    *ngFor="let d of getDaysInMonth(); let i = index;"
-    (click)="getProjected(i)"
+    *ngFor="let d of currentMonth;"
+    (click)="getProjected(d)"
     class="day-block"
-    [ngStyle]="{color: projDay === i + 1 ? 'white': (i + 1) === today.getDate() ? 'lightgray': 'black' }"
-  >
-    {{ i + 1 }}
+    [ngStyle]="{color: projDay === d ? 'white': d === today.getDate() ? 'lightgray': 'black' }"
+    [title]="d === 1 && monthStartDay"
+    >
+    {{ d }}
     <div
-      *ngFor="let t of getDaysTransactions(year, month, i + 1 )"
+      *ngFor="let t of getDaysTransactions(year, month, d)"
       class="transaction-small"
     >
       {{ t }}
     </div>
-    <div class="balance" *ngIf="i + 1 === projDay">
+    <div class="balance" *ngIf="d=== projDay">
       {{ projectedBalance }}
     </div>
   </div>

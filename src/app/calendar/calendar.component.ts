@@ -11,7 +11,7 @@ export class CalendarComponent implements OnInit {
   startingBalance = 400;
   projectedBalance = 0;
   amount: number = 0;
-  // transactions = {};
+  
   transactions: any = {
     "2021-11-03": [30],
     "2021-11-23": [3],
@@ -23,6 +23,14 @@ export class CalendarComponent implements OnInit {
 
   today = this.getLocalDate(new Date());
   currentDate = this.today;
+  currentMonth = this.getDaysInMonth();
+  monthStartDay!: number;
+
+  ngOnInit(): void {
+    console.log(this.today);
+    this.setMonthStartDay();
+  }
+
 
   addTransactionWithDate(date: string = this.getFormattedDate()) {
     const dateExists = this.transactions[date];
@@ -66,8 +74,8 @@ export class CalendarComponent implements OnInit {
   }
   getProjected(day: number) {
     const transactions = [];
-    this.projDay = day + 1;
-    this.currentDate = new Date(this.year, this.month - 1, day + 1);
+    this.projDay = day;
+    this.currentDate = new Date(this.year, this.month - 1, day);
 
     for (let key in this.transactions) {
       const keyDate = new Date(key).getTime();
@@ -118,8 +126,11 @@ export class CalendarComponent implements OnInit {
   getDaysInMonth() {
     return Array.from({
       length: new Date(this.year, this.month, 0).getDate(),
-    }).fill(null);
+    }, (i,_ ) => {
+      return _ + 1;
+    })
   }
+
   changeDate(val: string) {
     // Changes Month by 1
     if (val === "future") {
@@ -128,7 +139,11 @@ export class CalendarComponent implements OnInit {
     if (val == "past") {
       this.currentDate = new Date(this.year, this.month - 2, this.day);
     }
+    this.setMonthStartDay()
   }
-
-  ngOnInit(): void {}
+  setMonthStartDay(){
+    const currentDate = new Date(this.currentDate.getTime());
+    this.monthStartDay = new Date(currentDate.setDate(1)).getDay();
+  }
+  
 }

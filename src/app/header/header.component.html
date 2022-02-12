@@ -1,0 +1,8 @@
+<button (click)="prevMonth()">{{ "\<" }}</button> 
+<span class="date">
+
+      {{ currentDate.month + 1}}/{{
+            currentDate.year
+      }}
+</span>
+<button (click)="nextMonth()">{{ ">" }}</button>

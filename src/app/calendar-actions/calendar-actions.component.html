@@ -1,0 +1,35 @@
+<form class="transaction-form" [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+<div style="display: flex;">
+  <button (click)="toggleTransactionType()" style="width: 10%; border: none;" type="button" [ngStyle]="{color: transactionType === '-' ? 'red':'green'}">
+      {{ transactionType }}
+    </button>
+  <input type="number" style="width: 30%;" formControlName="amount" #in (input)="+in.value! < 0 ? (transactionType = '-' ) : transactionType = '+'" />
+  <select formControlName="category">
+    <option value="Uncategorized" selected>Select a Category</option>
+    <option value="Uncategorized">Uncategorized</option>
+    <optgroup label="Income">
+      <option value="Salary">Salary</option>
+    </optgroup>
+    <optgroup label="Expenses">
+      <option value="Rent">Rent</option>
+      <option value="Gas">Gas</option>
+      <option value="Fun">Fun</option>
+      <option value="Food">Food</option>
+    </optgroup>
+  </select>
+  <input type="date" formControlName="date" />
+  <select formControlName="frequency" >
+    <option value="Once" selected> Once</option>
+    <option value="Weekly">Weekly</option>
+    <option value="Bi-Weekly">Biweekly</option>
+    <option value="Monthly">Monthly</option>
+  </select>
+</div>
+<input
+formControlName="name"
+type="text"
+class="new-transaction-label"
+placeholder="Description..."
+/>
+  <button>Click to Add Transaction</button>
+</form>

@@ -1,0 +1,16 @@
+<div class="days-of-week">
+  <div class="day" *ngFor="let day of days">{{ day.slice(0, 3) }}</div>
+</div>
+<app-calendar-day
+  (click)="!s.padding ? selectDay(s.day): changeMonth(s.day)"
+  class="cal-day"
+  [balance]="s.day === todaysDate && !s.padding && currentDate.month === thisMonth && s.fullDate.getFullYear() === thisYear ? balance : projectedBalance"
+  [ngClass]="{
+    padding: s.padding,
+    today: s.day === todaysDate && !s.padding &&currentDate.month === thisMonth,
+    current: currentDate.date === s.day && !s.padding
+  }"
+  [date]="s.day"
+  [transactions]="!s.padding ? getDaysTransactions(s.day):[]"
+  *ngFor="let s of squares"
+></app-calendar-day>

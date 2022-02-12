@@ -1,5 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+*{
+    box-sizing: border-box;
+    font-family: monospace;
+    
+}
+html{
+    margin: auto;
+
+}
 html,body{
     height: 100%;
-    margin: 0;
+    max-width: 800px;     
+}
+
+button{
+    padding: 6px 0px;
+
+    &.danger {
+        border: solid rgb(158, 0, 0) 2px!important;
+        color: rgb(158, 0, 0)!important;
+    &:hover{
+        background-color:rgb(158, 0, 0)!important;
+        color: rgb(255, 255, 255)!important;
+    } 
+    
+    }
 }

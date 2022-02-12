@@ -1,0 +1,46 @@
+:host{
+  position: relative;
+    flex: 1 13%;
+    height: 20vw;
+    border: 1px solid gray;
+    color: gray;
+    background: white;
+    border-radius: 4px;
+    transition: background-color 0.5s;
+    overflow-y: auto;
+    max-height: 156px;
+    text-align: end;
+  
+
+    .balance{display: none;}
+
+    &.today{
+      border-color: black;
+      color: black;
+    
+      .balance{
+        display: block;
+      }
+    }
+    &.current{
+        border-color: rgb(155, 0, 0);
+        color: rgb(149, 0, 0);
+      opacity: 1;  
+        .balance{
+          display: block;
+        }
+      }
+
+    &:hover,&.weekday:hover{
+       opacity: .85;
+     }
+
+  }
+  p{
+      margin: 2px;
+  }
+  .balance{
+    position: absolute;
+    bottom: 1vh;
+    right: 0;
+  }

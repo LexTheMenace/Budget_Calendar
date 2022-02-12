@@ -1,1 +1,23 @@
-<app-calendar></app-calendar>
+<app-header
+[currentDate]="{month,year}"
+(prev)="changeMonth('prev')"
+(next)="changeMonth('next')"
+></app-header>
+<app-calendar-container
+[squares]="squares"
+[days]="weekdays"
+[balance]="balance"
+[projectedBalance]="projectedBalance"
+(changeDate)="changeDate($event)"
+[currentDate]="{month,date,year}"
+[transactions]="transactions"
+(prev)="changeMonth('prev')"
+(next)="changeMonth('next')"
+></app-calendar-container>
+<app-calendar-actions
+
+[currentDate]="{month,date,year}"
+(addTransaction)="addTransaction($event)"
+></app-calendar-actions>
+<button (click)="save()">Save Calendar</button>
+<button class="danger" (click)="reset()">Delete All Transactions</button>

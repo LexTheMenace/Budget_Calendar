@@ -1,0 +1,14 @@
+<p style="margin-bottom: 10%;">{{ date }}</p>
+<p
+(click)="logTransactions()"
+class=""
+  *ngFor="let t of transactions"
+  [ngStyle]="{ 
+      color: t.amount < 0 ? 'red' : 
+      t.amount > 0 ? 'green' : 
+      'black' 
+    }"
+>
+  {{ t.amount }}
+</p>
+<p class="balance">{{ balance }}</p>

@@ -35,9 +35,9 @@ export class AppComponent implements OnInit {
     window.addEventListener("touchend", (e) => {
       const distance = e.changedTouches[0].screenX;
 
-      distance - this.touchX > 30
+      distance - this.touchX < 30
         ? this.changeMonth("next")
-        : distance - this.touchX < -30
+        : distance - this.touchX > -30
         ? this.changeMonth("prev")
         : null;
     });

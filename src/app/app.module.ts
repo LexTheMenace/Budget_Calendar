@@ -8,6 +8,8 @@ import { HeaderComponent } from './header/header.component';
 import { CalendarContainerComponent } from './calendar-container/calendar-container.component';
 import { CalendarDayComponent } from './calendar-container/calendar-day/calendar-day.component';
 import { CalendarActionsComponent } from './calendar-actions/calendar-actions.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,13 @@ import { CalendarActionsComponent } from './calendar-actions/calendar-actions.co
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

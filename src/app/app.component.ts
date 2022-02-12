@@ -24,11 +24,24 @@ export class AppComponent implements OnInit {
   startingMonthBalance: number = 0;
   balance: number = 0;
   projectedBalance: number = 0;
-  calendarDate!:Date;
-
+  calendarDate!: Date;
+  touchX: any;
   transactions: Transaction[] = [] as Transaction[];
 
   ngOnInit(): void {
+    window.addEventListener("touchstart", (e) => {
+      this.touchX = e.changedTouches[0].screenX;
+    });
+    window.addEventListener("touchend", (e) => {
+      const distance = e.changedTouches[0].screenX;
+
+      distance - this.touchX > 30
+        ? this.changeMonth("next")
+        : distance - this.touchX < -30
+        ? this.changeMonth("prev")
+        : null;
+    });
+
     this.load();
     this.setProjectedBalance();
     this.balance += this.projectedBalance;
@@ -79,7 +92,11 @@ export class AppComponent implements OnInit {
     const squares = [];
     for (let i = 1; i <= paddingDays + daysInMonth; i++) {
       if (i > paddingDays) {
-        const daySquare = { day: i - paddingDays, padding: false, fullDate: this.calendarDate };
+        const daySquare = {
+          day: i - paddingDays,
+          padding: false,
+          fullDate: this.calendarDate,
+        };
         squares.push(daySquare);
       } else {
         const daysLastMonth = new Date(this.year, this.month, 0).getDate();
@@ -145,22 +162,21 @@ export class AppComponent implements OnInit {
       }
       for (let i = 1; i < 100; i++) {
         const setDate = new Date(date);
-        
+
         if (frequency === "Weekly" || frequency === "Bi-Weekly") {
-          
           // Delete +1 for date later?
           setDate.setDate(setDate.getDate() + 1 + interval! * i);
         } else {
-          setDate.setDate(setDate.getDate() +1);
+          setDate.setDate(setDate.getDate() + 1);
           setDate.setMonth(setDate.getMonth() + 1 * i);
         }
         console.log(setDate);
-        
+
         this.transactions.push(
-          new Transaction(setDate, amount, category, frequency, false,name)
+          new Transaction(setDate, amount, category, frequency, false, name)
         );
       }
-    this.save()      
+      this.save();
       this.transactions = this.getTransactions();
     }
   }
@@ -180,30 +196,40 @@ export class AppComponent implements OnInit {
       this.projectedBalance = this.startingMonthBalance;
     }
   }
-  save(){
-    localStorage.setItem('transactions', JSON.stringify(this.transactions))
+  save() {
+    localStorage.setItem("transactions", JSON.stringify(this.transactions));
   }
-  reset(){
-    if(confirm('Sure?')){
-      localStorage.removeItem('transactions')
-      
+  reset() {
+    if (confirm("Sure?")) {
+      localStorage.removeItem("transactions");
     }
   }
-  getTransactions(){
-    const TRANSACTIONS: Transaction[] = localStorage.getItem('transactions') ? JSON.parse(localStorage.getItem('transactions')!): [];
-    
-    return TRANSACTIONS.filter(t => new Date(t.date).getMonth() === this.calendarDate.getMonth()&&  new Date(t.date).getFullYear() === this.calendarDate.getFullYear() ).map(
-        ({ date, amount, category, frequency, }) =>
-          new Transaction(date, amount, category, frequency,false)
-      );
-  }
-  getTransactionsByMonth(data:{month:number, year:number}){
-    const TRANSACTIONS: Transaction[] = localStorage.getItem('transactions') ? JSON.parse(localStorage.getItem('transactions')!): [];
-    
-    return TRANSACTIONS.filter(t => new Date(t.date).getMonth() === data.month&&  new Date(t.date).getFullYear() === data.year ).map(
-        ({ date, amount, category, frequency }) =>
-          new Transaction(date, amount, category, frequency,false)
-      );
-} 
+  getTransactions() {
+    const TRANSACTIONS: Transaction[] = localStorage.getItem("transactions")
+      ? JSON.parse(localStorage.getItem("transactions")!)
+      : [];
 
+    return TRANSACTIONS.filter(
+      (t) =>
+        new Date(t.date).getMonth() === this.calendarDate.getMonth() &&
+        new Date(t.date).getFullYear() === this.calendarDate.getFullYear()
+    ).map(
+      ({ date, amount, category, frequency }) =>
+        new Transaction(date, amount, category, frequency, false)
+    );
+  }
+  getTransactionsByMonth(data: { month: number; year: number }) {
+    const TRANSACTIONS: Transaction[] = localStorage.getItem("transactions")
+      ? JSON.parse(localStorage.getItem("transactions")!)
+      : [];
+
+    return TRANSACTIONS.filter(
+      (t) =>
+        new Date(t.date).getMonth() === data.month &&
+        new Date(t.date).getFullYear() === data.year
+    ).map(
+      ({ date, amount, category, frequency }) =>
+        new Transaction(date, amount, category, frequency, false)
+    );
+  }
 }

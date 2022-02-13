@@ -175,8 +175,6 @@ export class AppComponent implements OnInit, OnDestroy {
           setDate.setDate(setDate.getDate() + 1);
           setDate.setMonth(setDate.getMonth() + 1 * i);
         }
-        console.log(setDate);
-
         this.transactions.push(
           new Transaction(setDate, amount, category, frequency, false, name)
         );
@@ -208,7 +206,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (confirm("Sure?")) {
       localStorage.removeItem("transactions");
       this.transactions = this.getTransactions();
-      this.setProjectedBalance();
+      this.startingMonthBalance = 0;
+      this.setProjectedBalance();      
     }
   }
   getTransactions() {

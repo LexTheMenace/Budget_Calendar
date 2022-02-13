@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Transaction } from "./Transaction.model";
 
 @Component({
@@ -6,7 +6,7 @@ import { Transaction } from "./Transaction.model";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   weekdays = [
     "Sunday",
     "Monday",
@@ -35,16 +35,21 @@ export class AppComponent implements OnInit {
     window.addEventListener("touchend", (e) => {
       const distance = e.changedTouches[0].screenX;
 
-      distance - this.touchX < 30
-        ? this.changeMonth("next")
-        : distance - this.touchX > -30
+      distance - this.touchX > 30
         ? this.changeMonth("prev")
+        : distance - this.touchX < -30
+        ? this.changeMonth("next")
         : null;
     });
 
     this.load();
     this.setProjectedBalance();
     this.balance += this.projectedBalance;
+  }
+  ngOnDestroy(): void {
+    if(window.removeAllListeners){
+      window.removeAllListeners();
+    }
   }
   load() {
     const dt = new Date();
@@ -202,6 +207,8 @@ export class AppComponent implements OnInit {
   reset() {
     if (confirm("Sure?")) {
       localStorage.removeItem("transactions");
+      this.transactions = this.getTransactions();
+      this.setProjectedBalance();
     }
   }
   getTransactions() {

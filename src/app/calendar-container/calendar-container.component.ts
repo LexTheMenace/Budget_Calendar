@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Transaction } from '../Transaction.model';
 
 @Component({
   selector: 'app-calendar-container',
@@ -12,7 +13,7 @@ export class CalendarContainerComponent implements OnInit {
   @Input() projectedBalance!:number;
   @Output() changeDate: EventEmitter<any> = new EventEmitter();
   @Input() currentDate!:any;
-  @Input() transactions!:any[];
+  @Input() transactions!:Transaction[];
 
   @Output() prev: EventEmitter<void> = new EventEmitter();
   @Output() next: EventEmitter<void> = new EventEmitter();

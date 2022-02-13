@@ -11,8 +11,9 @@
     max-height: 156px;
     text-align: end;
   
-
-    .balance{display: none;}
+display: flex;
+flex-direction: column;
+    .balance{display: none; font-weight: bold;}
 
     &.today{
       border-color: black;
@@ -39,8 +40,4 @@
   p{
       margin: 2px;
   }
-  .balance{
-    position: absolute;
-    bottom: 1vh;
-    right: 0;
-  }
+  

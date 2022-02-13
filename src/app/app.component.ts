@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.balance += this.projectedBalance;
   }
   ngOnDestroy(): void {
-    if(window.removeAllListeners){
+    if (window.removeAllListeners) {
       window.removeAllListeners();
     }
   }
@@ -153,14 +153,21 @@ export class AppComponent implements OnInit, OnDestroy {
     name?: string | undefined;
   }) {
     const { date, amount, category, name, frequency } = newTransaction;
-    let formattedDate = new Date(date);
-    formattedDate.setDate(formattedDate.getDate() + 1);
+
+    let formattedDate = new Date(date + " 20:00");
+
     this.transactions.push(
-      new Transaction(this.getRandomID(),formattedDate, amount, category, frequency, false, name)
+      new Transaction(
+        this.getRandomID(),
+        formattedDate,
+        amount,
+        category,
+        frequency,
+        false,
+        name
+      )
     );
-    if (+date.split("-")[2] === this.date) {
-      this.setProjectedBalance();
-    }
+
     if (frequency !== "Once") {
       let interval: number;
       switch (frequency) {
@@ -172,21 +179,37 @@ export class AppComponent implements OnInit, OnDestroy {
           break;
       }
       for (let i = 1; i < 100; i++) {
-        const setDate = new Date(date);
-
         if (frequency === "Weekly" || frequency === "Bi-Weekly") {
           // Delete +1 for date later?
-          setDate.setDate(setDate.getDate() + 1 + interval! * i);
+          formattedDate.setDate(formattedDate.getDate() + interval!);
         } else {
-          setDate.setDate(setDate.getDate() + 1);
-          setDate.setMonth(setDate.getMonth() + 1 * i);
+          formattedDate.setMonth(formattedDate.getMonth() + 1);
         }
+
         this.transactions.push(
-          new Transaction(this.getRandomID(),setDate, amount, category, frequency, false, name)
+          new Transaction(
+            this.getRandomID(),
+            formattedDate,
+            amount,
+            category,
+            frequency,
+            false,
+            name
+          )
         );
       }
-      this.save();
     }
+    this.save();
+    this.setBalance();
+    this.setProjectedBalance();
+  }
+  setBalance() {
+    this.balance =
+      this.startingMonthBalance +
+      this.transactions
+        .filter((t) => t.date <= new Date())
+        .map((t) => t.amount)
+        .reduce((a, b) => a + b);
   }
   setProjectedBalance() {
     const dateStr = new Date(
@@ -210,35 +233,46 @@ export class AppComponent implements OnInit, OnDestroy {
       (t) =>
         new Date(t.date).getMonth() !== this.calendarDate.getMonth() ||
         new Date(t.date).getFullYear() !== this.calendarDate.getFullYear()
-    )
-    localStorage.setItem("transactions", JSON.stringify([...savedTransactions,...this.transactions]));
-    this.transactions = this.getTransactions();    
+    );
+    localStorage.setItem(
+      "transactions",
+      JSON.stringify([...savedTransactions, ...this.transactions])
+    );
+    this.transactions = this.getTransactions();
   }
   reset() {
     if (confirm("Sure?")) {
       localStorage.removeItem("transactions");
       this.transactions = this.getTransactions();
       this.startingMonthBalance = 0;
-      this.setProjectedBalance();      
+      this.setProjectedBalance();
     }
   }
-  getAllTransactions(): Transaction[]{
-   return localStorage.getItem("transactions")
-    ? (JSON.parse(localStorage.getItem("transactions")!)as Transaction[]).map(
-      ({id, date, amount, category, frequency }) =>
-        new Transaction(id,date, amount, category, frequency, false)
-    )
-    : [];
+  getAllTransactions(): Transaction[] {
+    return localStorage.getItem("transactions")
+      ? (
+          JSON.parse(localStorage.getItem("transactions")!) as Transaction[]
+        ).map(
+          ({ id, date, amount, category, frequency }) =>
+            new Transaction(
+              id,
+              new Date(date),
+              amount,
+              category,
+              frequency,
+              false
+            )
+        )
+      : [];
   }
   getTransactions() {
-    
     return this.getAllTransactions().filter(
       (t) =>
         new Date(t.date).getMonth() === this.calendarDate.getMonth() &&
         new Date(t.date).getFullYear() === this.calendarDate.getFullYear()
-    )
+    );
   }
-  getRandomID(){
-    return Math.floor(Math.random() * 84920375892475).toString()
+  getRandomID() {
+    return Math.floor(Math.random() * 84920375892475).toString();
   }
 }

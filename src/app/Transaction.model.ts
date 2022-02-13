@@ -1,8 +1,7 @@
 export class Transaction{
-    public date: Date;
     
-    constructor(public id: string,private dateStr: string | Date, public amount: number, public category: string, public frequency: string, public fulfilled: boolean,public name?: string){
-        this.date = new Date(dateStr);        
+    constructor(public id: string,public date: Date | Date, public amount: number, public category: string, public frequency: string, public fulfilled: boolean,public name?: string){
+        this.date = new Date(date);        
     }
     get month(){
         return this.date.getMonth();

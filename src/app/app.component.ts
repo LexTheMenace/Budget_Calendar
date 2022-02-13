@@ -64,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.month = dt.getMonth();
     this.year = dt.getFullYear();
 
+    // Adjust Balance On Increase, Add this month's transactions to starting balance
     if (this.month - currentMonth === (1 || -11)) {
       let transactions = this.transactions.map((t) => t.amount);
       const addFromThisMonth = transactions.length
@@ -71,7 +72,12 @@ export class AppComponent implements OnInit, OnDestroy {
         : 0;
       this.startingMonthBalance += addFromThisMonth;
     }
+
+    // Get new months transactions
     this.transactions = this.getTransactions();
+
+    // Decrease Balance On Decrease, Remove new month's transactions from starting balance
+
     if (this.month - currentMonth === (-1 || 10)) {
       let transactions = this.transactions.map((t) => t.amount);
       const subtractFromThisMonth = transactions.length
@@ -150,7 +156,7 @@ export class AppComponent implements OnInit, OnDestroy {
     let formattedDate = new Date(date);
     formattedDate.setDate(formattedDate.getDate() + 1);
     this.transactions.push(
-      new Transaction(formattedDate, amount, category, frequency, false, name)
+      new Transaction(this.getRandomID(),formattedDate, amount, category, frequency, false, name)
     );
     if (+date.split("-")[2] === this.date) {
       this.setProjectedBalance();
@@ -176,11 +182,10 @@ export class AppComponent implements OnInit, OnDestroy {
           setDate.setMonth(setDate.getMonth() + 1 * i);
         }
         this.transactions.push(
-          new Transaction(setDate, amount, category, frequency, false, name)
+          new Transaction(this.getRandomID(),setDate, amount, category, frequency, false, name)
         );
       }
       this.save();
-      this.transactions = this.getTransactions();
     }
   }
   setProjectedBalance() {
@@ -200,7 +205,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   save() {
-    localStorage.setItem("transactions", JSON.stringify(this.transactions));
+    // Fetch stored transactions exculding this month, as we will overwrite it
+    let savedTransactions = this.getAllTransactions().filter(
+      (t) =>
+        new Date(t.date).getMonth() !== this.calendarDate.getMonth() ||
+        new Date(t.date).getFullYear() !== this.calendarDate.getFullYear()
+    )
+    localStorage.setItem("transactions", JSON.stringify([...savedTransactions,...this.transactions]));
+    this.transactions = this.getTransactions();    
   }
   reset() {
     if (confirm("Sure?")) {
@@ -210,32 +222,23 @@ export class AppComponent implements OnInit, OnDestroy {
       this.setProjectedBalance();      
     }
   }
+  getAllTransactions(): Transaction[]{
+   return localStorage.getItem("transactions")
+    ? (JSON.parse(localStorage.getItem("transactions")!)as Transaction[]).map(
+      ({id, date, amount, category, frequency }) =>
+        new Transaction(id,date, amount, category, frequency, false)
+    )
+    : [];
+  }
   getTransactions() {
-    const TRANSACTIONS: Transaction[] = localStorage.getItem("transactions")
-      ? JSON.parse(localStorage.getItem("transactions")!)
-      : [];
-
-    return TRANSACTIONS.filter(
+    
+    return this.getAllTransactions().filter(
       (t) =>
         new Date(t.date).getMonth() === this.calendarDate.getMonth() &&
         new Date(t.date).getFullYear() === this.calendarDate.getFullYear()
-    ).map(
-      ({ date, amount, category, frequency }) =>
-        new Transaction(date, amount, category, frequency, false)
-    );
+    )
   }
-  getTransactionsByMonth(data: { month: number; year: number }) {
-    const TRANSACTIONS: Transaction[] = localStorage.getItem("transactions")
-      ? JSON.parse(localStorage.getItem("transactions")!)
-      : [];
-
-    return TRANSACTIONS.filter(
-      (t) =>
-        new Date(t.date).getMonth() === data.month &&
-        new Date(t.date).getFullYear() === data.year
-    ).map(
-      ({ date, amount, category, frequency }) =>
-        new Transaction(date, amount, category, frequency, false)
-    );
+  getRandomID(){
+    return Math.floor(Math.random() * 84920375892475).toString()
   }
 }

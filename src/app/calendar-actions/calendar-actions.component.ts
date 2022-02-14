@@ -24,6 +24,7 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
   }
   onSubmit() {
   this.addTransaction.emit(this.transactionForm.value);
+  this.initForm();
   }
   initForm() {
     let date = this.formatDate()

@@ -31,7 +31,7 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
     this.transactionForm = new FormGroup({
       date: new FormControl(date, Validators.required),
       category: new FormControl('Uncategorized',Validators.required),
-      amount: new FormControl(0, Validators.required),
+      amount: new FormControl(0, [Validators.required,Validators.pattern(/^[1-9]*$/)]),
       name: new FormControl(),
       frequency: new FormControl('Once')
     });

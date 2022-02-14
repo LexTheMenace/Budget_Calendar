@@ -24,9 +24,14 @@ flex-direction: column;
       }
     }
     &.current{
+      border-width: 2px;
         border-color: rgb(155, 0, 0);
         color: rgb(149, 0, 0);
       opacity: 1;  
+      p:first-child{
+        font-weight: bold;
+        font-size: small;
+      }
         .balance{
           display: block;
         }
@@ -40,4 +45,7 @@ flex-direction: column;
   p{
       margin: 2px;
   }
-  
+  .transactions{
+    overflow: auto;
+    flex: auto;
+  }

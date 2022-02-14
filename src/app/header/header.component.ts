@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Output() prev: EventEmitter<void> = new EventEmitter();
   @Output() next: EventEmitter<void> = new EventEmitter();
+  @Output() resetDate: EventEmitter<void> = new EventEmitter();
   @Input() currentDate!: {month: number, year: number}
   constructor() { }
 

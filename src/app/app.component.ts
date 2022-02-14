@@ -231,8 +231,8 @@ export class AppComponent implements OnInit, OnDestroy {
     // Fetch stored transactions exculding this month, as we will overwrite it
     let savedTransactions = this.getAllTransactions().filter(
       (t) =>
-        new Date(t.date).getMonth() !== this.calendarDate.getMonth() ||
-        new Date(t.date).getFullYear() !== this.calendarDate.getFullYear()
+        t.date.getMonth() !== this.calendarDate.getMonth() ||
+      t.date.getFullYear() !== this.calendarDate.getFullYear()
     );
     localStorage.setItem(
       "transactions",
@@ -246,7 +246,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.transactions = this.getTransactions();
       this.startingMonthBalance = 0;
       this.setProjectedBalance();
+      this.setBalance();
+      this.resetDate();
     }
+  }
+  resetDate(){
+    this.nav = 0;
+    this.startingMonthBalance = 0;
+    this.load();
+    this.setProjectedBalance();
   }
   getAllTransactions(): Transaction[] {
     return localStorage.getItem("transactions")

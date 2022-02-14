@@ -31,5 +31,5 @@ type="text"
 class="new-transaction-label"
 placeholder="Description..."
 />
-  <button>Click to Add Transaction</button>
+  <button [disabled]="transactionForm.invalid">Add Transaction</button>
 </form>

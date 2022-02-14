@@ -5,6 +5,7 @@
   justify-content: space-evenly;
   align-items: center;
   font-family: monospace;
+  position: relative;
   button {
     border: none;
     opacity: 0.9;
@@ -16,5 +17,13 @@
     }
   }
   .date {
+  }
+  .jump-today{
+    position: absolute;
+    right: 3px;
+    font-weight: bold;
+    &:hover{
+      color: gold;
+    }
   }
 }

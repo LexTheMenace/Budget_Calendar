@@ -167,7 +167,8 @@ export class AppComponent implements OnInit, OnDestroy {
         name
       )
     );
-
+    console.log(this.transactions)
+    
     if (frequency !== "Once") {
       let interval: number;
       switch (frequency) {

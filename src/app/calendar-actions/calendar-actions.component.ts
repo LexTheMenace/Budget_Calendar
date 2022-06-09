@@ -32,18 +32,22 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
     this.transactionForm = new FormGroup({
       date: new FormControl(date, Validators.required),
       category: new FormControl('Uncategorized',Validators.required),
-      amount: new FormControl(0, [Validators.required,Validators.pattern(/^[1-9]*$/)]),
+      amount: new FormControl(0, [Validators.required,Validators.pattern(/^[0-9]*$/)]),
       name: new FormControl(),
       frequency: new FormControl('Once')
     });
+    console.log(this.transactionForm.controls['amount'].value);
+
   }
   addLeadingZero(num: number){
-  return num < 10 ?  "0" + num : num
+    return num < 10 ?  "0" + num : num
   }
+  
   toggleTransactionType(){
     this.transactionType = this.transactionType === '-' ? '+' : '-';
     this.transactionForm.controls['amount'].setValue(-(this.transactionForm.controls['amount'].value))
   }
+
   formatDate(){
     let { year, month, date: day } = this.currentDate;
 
@@ -52,5 +56,11 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
       this.addLeadingZero(month +1),
       this.addLeadingZero(day),
     ].join("-");
+  }
+  handleInput(e: Event){
+    console.log(this.transactionForm.controls['amount'].value);
+    
+    let amt = (e.target as HTMLInputElement).valueAsNumber
+    amt < 0 ? (this.transactionType = '-' ) : this.transactionType = '+'
   }
 }

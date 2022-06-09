@@ -3,7 +3,7 @@
   <button (click)="toggleTransactionType()" style="width: 10%; border: none;" type="button" [ngStyle]="{color: transactionType === '-' ? 'red':'green'}">
       {{ transactionType }}
     </button>
-  <input type="number" pattern="\d*" style="width: 25%;" formControlName="amount" #in (input)="+in.value! < 0 ? (transactionType = '-' ) : transactionType = '+'" />
+  <input type="number" pattern="\d*" style="width: 25%;" formControlName="amount" #in (input)="in.valueAsNumber! < 0 ? (transactionType = '-' ) : transactionType = '+'" />
   <select formControlName="category">
     <option value="Uncategorized" selected>Select a Category</option>
     <option value="Uncategorized">Uncategorized</option>
@@ -31,5 +31,5 @@ type="text"
 class="new-transaction-label"
 placeholder="Description..."
 />
-  <button [disabled]="transactionForm.invalid">Add Transaction</button>
+  <button [disabled]="transactionForm.invalid || +transactionForm.controls['amount'].value === 0">Add Transaction</button>
 </form>

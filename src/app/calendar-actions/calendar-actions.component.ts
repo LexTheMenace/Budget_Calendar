@@ -26,6 +26,7 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
   this.addTransaction.emit(this.transactionForm.value);
   this.initForm();
   }
+
   initForm() {
     let date = this.formatDate()
 
@@ -36,8 +37,6 @@ export class CalendarActionsComponent implements OnInit, OnChanges {
       name: new FormControl(),
       frequency: new FormControl('Once')
     });
-    console.log(this.transactionForm.controls['amount'].value);
-
   }
   addLeadingZero(num: number){
     return num < 10 ?  "0" + num : num

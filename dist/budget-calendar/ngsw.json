@@ -1,0 +1,89 @@
+{
+  "configVersion": 1,
+  "timestamp": 1705196842523,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-es2017.72f65324fa39d91aead3.js",
+        "/main-es5.72f65324fa39d91aead3.js",
+        "/manifest.webmanifest",
+        "/polyfills-es2017.a61084d030c2a30fc4ae.js",
+        "/polyfills-es5.9a5c42b366ee2f1d4033.js",
+        "/runtime-es2017.096def75feb763158e0a.js",
+        "/runtime-es5.096def75feb763158e0a.js",
+        "/styles.da41c8e8fa7b558c6bcf.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/transactions.ts"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/assets/transactions.ts": "1de1ad11b8b89cb9d9e77098e6156b6a12549492",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/index.html": "cb4b6cb098ea7bdc69771883f9ccd42b9677ddf3",
+    "/main-es2017.72f65324fa39d91aead3.js": "65bb1dd0b8971932e162458fe5951ca289da3bf2",
+    "/main-es5.72f65324fa39d91aead3.js": "3e5dfa10e3641558f523994037cf088e820e8b50",
+    "/manifest.webmanifest": "3d1bc5471a1e54c186fb162443e75def5f68e34a",
+    "/polyfills-es2017.a61084d030c2a30fc4ae.js": "0e5359f698ba83aed23a341a51d01b8bb3d8f24f",
+    "/polyfills-es5.9a5c42b366ee2f1d4033.js": "0ef749d8edc290bd94783f4b61e230c96b0eb9e5",
+    "/runtime-es2017.096def75feb763158e0a.js": "90cd5d98c42c0806ed99efed0fa49ce94d165e94",
+    "/runtime-es5.096def75feb763158e0a.js": "90cd5d98c42c0806ed99efed0fa49ce94d165e94",
+    "/styles.da41c8e8fa7b558c6bcf.css": "285679027fb28eca5de7bc5ca5f0d5a561d4372f"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}

@@ -1,0 +1,1 @@
+*{box-sizing:border-box;font-family:monospace}html{margin:auto}body,html{height:100%;max-width:800px;overflow-x:hidden}button{padding:6px 0}button.danger{border:2px solid #9e0000!important;color:#9e0000!important}button.danger:hover{background-color:#9e0000!important;color:#fff!important}
